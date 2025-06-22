@@ -12,6 +12,7 @@ contract Kudifi is Pausable, Ownable, EIP712 {
 
     error InvalidPhoneNumber();
     error TransactionFailed();
+    error WalletAlreadyExists();
 
     event KudiWalletCreated(address, string, uint256);
 
@@ -31,6 +32,7 @@ contract Kudifi is Pausable, Ownable, EIP712 {
     }
 
     mapping(address => uint256) private _nonces;
+    mapping(string => address) private validWallets;
 
     bytes32 private constant _TYPEHASH = keccak256(
             "Request(address from,address to,uint256 value,uint256 gas,uint256 nonce,bytes data)"
@@ -38,47 +40,40 @@ contract Kudifi is Pausable, Ownable, EIP712 {
 
     constructor() Ownable(msg.sender) EIP712("KudiFi", "V1"){}
 
-    function newKudiWallet(string memory phoneNumber) external whenNotPaused returns (address wallet) {
-        nonce = block.timestamp + 1;
-        require(msg.sender == caller);
+    function newKudiWallet(string memory phoneNumber) public whenNotPaused returns (address wallet) {
+        // nonce = block.timestamp + 1;
+        // require(msg.sender == caller);
         if(bytes(phoneNumber).length < 12) revert InvalidPhoneNumber();
         bytes memory bytecode = abi.encode(address(kwallet));
-        bytes32 salt = keccak256(abi.encodePacked(phoneNumber, nonce));
+        bytes32 salt = keccak256(abi.encodePacked(phoneNumber));
 
         assembly{
             wallet := create2(0, add(bytecode, 32), mload(bytecode), salt )
         }
+        if (wallet == address(0)){
+            revert WalletAlreadyExists();
+        }
         allWallets.push(wallet);
+        validWallets[phoneNumber] = wallet;
 
         emit KudiWalletCreated(wallet, phoneNumber, allWallets.length);
     }
 
-    function addressOfPhonenumber(
-        string calldata phoneNumber
-    ) public view whenNotPaused returns (address) {
-        return
-            address(
-                uint160(
-                    uint256(
-                        keccak256(
-                            abi.encodePacked(
-                                bytes1(0xff),
-                                keccak256(abi.encodePacked(phoneNumber, nonce)),
-                                keccak256(abi.encode(address(kwallet)))
-                            )
-                        )
-                    )
-                )
-            );
+    function addressOfPhonenumber(string calldata phoneNumber) public  whenNotPaused returns (address validWallet) {
+        validWallet = validWallets[phoneNumber];
+        if (validWallet == address(0)){ //This means user does not have a wallet with us yet so we have to create one?
+            validWallet = newKudiWallet(phoneNumber);
+        }
+        return validWallet;
     }
 
     function balanceOf(
         string calldata phonenumberOrUUID,
         address token
-    ) external view onlyOwner returns (uint) {
+    ) external onlyOwner returns (uint) {
         address wallet = addressOfPhonenumber(phonenumberOrUUID);
 
-        uint amount = IWallet(wallet).balance(token); // change to interface
+        uint amount = kwallet.balance(token); // change to interface
 
         return amount;
     }
