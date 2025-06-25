@@ -65,7 +65,7 @@ contract Kudifi is Pausable, Ownable, EIP712 {
     }
 
     /**
-     * Checks the wallets address of the valid phone number
+     * Checks the wallet's address of the valid phone number
      * if user does not have an address, it will create one
      * @param phoneNumber user's phone number
      * @return validWallet user's valid wallet address

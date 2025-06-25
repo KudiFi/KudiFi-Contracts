@@ -19,6 +19,16 @@ This instantly puts a lot of people subscribed to mobile services in Africa on t
 | **Get Wallet Address**  | Users can get their wallet address with their numbers            |
 | **Future**             | Withdraw to MoMo, cashback rewards, merchant integration |
 
+
+## Functions
+- newKudiWallet -> Creates a new wallet address with user's provided phone number
+- addressOfPhonenumber -> Checks the wallet's address of the valid phone number
+- balanceOf -> Checks the balance of the provided phone number
+- safeTransferToAccount -> Sends tokens from one address to another
+- transferToAddress -> transfers token to address
+- verify -> Verifies the signature
+- execute -> Executes the request
+
 ## TODO
 - Buy tokens with mobile money
 
@@ -30,3 +40,19 @@ This instantly puts a lot of people subscribed to mobile services in Africa on t
 - Send APE and other supported tokens to any number
 - Receive APE and other supported tokens from any user
 - One user obtains APE tokens can get extra rewards just by holding
+
+
+## Usage
+
+### Build
+
+`$ forge build`
+
+### Test
+
+`$ forge test`
+
+
+### Help
+
+`$ forge --help`
