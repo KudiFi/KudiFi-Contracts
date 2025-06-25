@@ -21,13 +21,13 @@ This instantly puts a lot of people subscribed to mobile services in Africa on t
 
 
 ## Functions
-- newKudiWallet -> Creates a new wallet address with user's provided phone number
-- addressOfPhonenumber -> Checks the wallet's address of the valid phone number
-- balanceOf -> Checks the balance of the provided phone number
-- safeTransferToAccount -> Sends tokens from one address to another
-- transferToAddress -> transfers token to address
-- verify -> Verifies the signature
-- execute -> Executes the request
+- `newKudiWallet` -> Creates a new wallet address with user's provided phone number
+- `addressOfPhonenumber` -> Checks the wallet's address of the valid phone number
+- `balanceOf` -> Checks the balance of the provided phone number
+- `safeTransferToAccount` -> Sends tokens from one address to another
+- `transferToAddress` -> transfers token to address
+- `verify` -> Verifies the signature
+- `execute` -> Executes the request
 
 ## TODO
 - Buy tokens with mobile money
