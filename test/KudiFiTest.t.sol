@@ -61,13 +61,4 @@ contract KudiTest is Test{
         assertTrue(wallet == wallet2);
     }
 
-    function testBalance() public {
-        // address(0) to represent native eth
-        address wallet = kudi.addressOfPhonenumber("233592766862");
-        deal(wallet, 1555e7);
-        address token = address(0);
-        uint256 amount = kudi.balanceOf("233592766862", token);
-        console2.log("amount is: ", amount);
-    }
-
 }
